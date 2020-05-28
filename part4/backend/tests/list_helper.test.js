@@ -55,7 +55,7 @@ describe('total likes', () => {
     expect(result).toBe(8)
   })
 
-  test('of three blogs is correct', () => {
+  test('of many blogs is correct', () => {
     const result = listHelper.totalLikes(manyBlogs)
     expect(result).toBe(60)
   })
@@ -84,6 +84,29 @@ describe('favourite blog', () => {
       "author": "Martin Fowler",
       "url": "https://martinfowler.com/articles/branching-patterns.html",
       "likes": 42
+    })
+  })
+})
+
+describe('most blogs', () => {
+  test('of empty list is empty object', () => {
+    const result = listHelper.mostBlogs(emptyBlogs)
+    expect(result).toEqual({})
+  })
+
+  test('of one blog is the only blog', () => {
+    const result = listHelper.mostBlogs(oneBlog)
+    expect(result).toEqual({
+      "author": "Brian Kernighan, Dennis Ritchie",
+      "blogs": 1
+    })
+  })
+
+  test('of many blogs is correct', () => {
+    const result = listHelper.mostBlogs(manyBlogs)
+    expect(result).toEqual({
+      "author": "Martin Fowler",
+      "blogs": 2
     })
   })
 })
