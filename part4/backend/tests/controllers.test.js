@@ -31,11 +31,16 @@ describe('GET /api/blogs', () => {
     const blog = new Blog({title, author, likes: 6})
     await blog.save()
     
-    const result = await api.get('/api/blogs').expect(200)
+    const result = await api.get('/api/blogs')
     expect(result.body.length).toBe(6)
   
     const bodyText = JSON.stringify(result.body)
     expect(bodyText).toContain(title)
     expect(bodyText).toContain(author)
+  })
+
+  test('Blog item has id defined', async () => {
+    const result = await api.get('/api/blogs')
+    expect(result.body[0].id).toBeDefined()
   })
 })
