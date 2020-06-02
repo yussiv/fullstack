@@ -57,4 +57,15 @@ describe('POST /api/blogs', () => {
     const resultAfter = await api.get('/api/blogs').expect(200)
     expect(resultAfter.body).toContainEqual(response.body)
   })
+
+  test('missing "likes" attribute is set to zero in saved blog', async () => {
+    const newEntry = {title: "test", author: "test"}
+    const response = await api
+      .post('/api/blogs')
+      .send(newEntry)
+      .set('Content-Type', 'application/json')
+      .expect(201)
+    
+    expect(response.body.likes).toBe(0)
+  })
 })
