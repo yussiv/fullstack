@@ -1,48 +1,8 @@
 const listHelper = require('../utils/list_helper')
 
+const manyBlogs = require('./utils/initial_blogs.json')
 const emptyBlogs = []
-
-const oneBlog = [
-  {
-    "title": "The C Programming Language",
-    "author": "Brian Kernighan, Dennis Ritchie",
-    "url": "https://archive.org/details/TheCProgrammingLanguageFirstEdition",
-    "likes": 8
-  }
-]
-
-const manyBlogs = [
-  {
-    "title": "The C Programming Language",
-    "author": "Brian Kernighan, Dennis Ritchie",
-    "url": "https://archive.org/details/TheCProgrammingLanguageFirstEdition",
-    "likes": 8
-  },
-  {
-    "title": "The Go Programming Language",
-    "author": "Robert Griesemer, Rob Pike, Ken Thompson",
-    "url": "https://golang.org/",
-    "likes": 1
-  },
-  {
-    "title": "Patterns for Managing Source Code Branches",
-    "author": "Martin Fowler",
-    "url": "https://martinfowler.com/articles/branching-patterns.html",
-    "likes": 42
-  },
-  {
-    "title": "The Go Programming Language ",
-    "author": "Uncle Bob",
-    "url": "http://blog.cleancoder.com/uncle-bob/2020/05/27/ReplDrivenDesign.html",
-    "likes": 7
-  },
-  {
-    "title": "KeystoneInterface",
-    "author": "Martin Fowler",
-    "url": "https://martinfowler.com/bliki/KeystoneInterface.html",
-    "likes": 2
-  }
-]
+const oneBlog = manyBlogs.slice(0, 1)
 
 describe('total likes', () => {
   test('of empty list is zero', () => {
@@ -94,7 +54,7 @@ describe('most blogs', () => {
     expect(result).toEqual({})
   })
 
-  test('of one blog is the only blog', () => {
+  test('of one blog is the only author with a count of one', () => {
     const result = listHelper.mostBlogs(oneBlog)
     expect(result).toEqual({
       "author": "Brian Kernighan, Dennis Ritchie",
@@ -107,6 +67,29 @@ describe('most blogs', () => {
     expect(result).toEqual({
       "author": "Martin Fowler",
       "blogs": 2
+    })
+  })
+})
+
+describe('most likes', () => {
+  test('of empty list is empty object', () => {
+    const result = listHelper.mostLikes(emptyBlogs)
+    expect(result).toEqual({})
+  })
+
+  test('of one blog is the likes of the only blog', () => {
+    const result = listHelper.mostLikes(oneBlog)
+    expect(result).toEqual({
+      author: "Brian Kernighan, Dennis Ritchie",
+      likes: 8
+    })
+  })
+
+  test('of many blogs is correct', () => {
+    const result = listHelper.mostLikes(manyBlogs)
+    expect(result).toEqual({
+      author: "Martin Fowler",
+      likes: 44
     })
   })
 })
