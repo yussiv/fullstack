@@ -37,11 +37,15 @@ describe('GET /api/blogs', () => {
 
 describe('POST /api/blogs', () => {
   test('Blog item can be added', async () => {
-    const [title, author, likes] = [uuid(), uuid(), Math.floor(Math.random() * 100)]
-    const newEntry = {title, author, likes}
+    const newEntry = {
+      title: uuid(),
+      author: uuid(),
+      url: uuid(),
+      likes: Math.floor(Math.random() * 100)
+    }
 
     const resultBefore = await api.get('/api/blogs').expect(200)
-    const foundBefore = resultBefore.body.filter(b => b.title === title)
+    const foundBefore = resultBefore.body.filter(b => b.title === newEntry.title)
     expect(foundBefore.length).toBe(0)
 
     const response = await api
@@ -52,6 +56,7 @@ describe('POST /api/blogs', () => {
     
     const responseBody = {...response.body}
     delete responseBody.id
+    
     expect(responseBody).toEqual(newEntry)
 
     const resultAfter = await api.get('/api/blogs').expect(200)
@@ -59,7 +64,7 @@ describe('POST /api/blogs', () => {
   })
 
   test('missing "likes" attribute is set to zero in saved blog', async () => {
-    const newEntry = {title: "test", author: "test"}
+    const newEntry = {title: "test", author: "test", url: "test"}
     const response = await api
       .post('/api/blogs')
       .send(newEntry)
@@ -67,5 +72,22 @@ describe('POST /api/blogs', () => {
       .expect(201)
     
     expect(response.body.likes).toBe(0)
+  })
+
+  test('not providing "title" or "url" attribute results to 400 Bad Request', async () => {
+    const noUrl = {title: "test", author: "test"}
+    const noTitle = {author: "test", url: "test"}
+
+    await api
+      .post('/api/blogs')
+      .send(noUrl)
+      .set('Content-Type', 'application/json')
+      .expect(400)
+    
+    await api
+      .post('/api/blogs')
+      .send(noTitle)
+      .set('Content-Type', 'application/json')
+      .expect(400)
   })
 })

@@ -9,8 +9,7 @@ router.get('/', async (request, response) => {
 
 
 router.post('/', async (request, response) => {
-  const {title, author, likes} = request.body
-  const blog = new Blog({title, author, likes})
+  const blog = new Blog(request.body)
 
   const newBlog = await blog.save()
   response.status(201).json(newBlog)
