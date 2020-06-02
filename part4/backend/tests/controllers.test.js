@@ -124,3 +124,29 @@ describe('DELETE /api/blogs/:id', () => {
       .expect(204)
   })
 })
+
+describe('PUT /api/blogs/:id', () => {
+  test('like count is updated', async () => {
+    const newInfo = { likes: 999 }
+    const id = await helper.getExistingId()
+
+    expect(await Blog.findById(id)).not.toBe(newInfo.likes)
+
+    const response = await api
+      .put(`/api/blogs/${id}`)
+      .send(newInfo)
+      .expect(200)
+    
+    expect(response.body.likes).toBe(newInfo.likes)
+  })
+
+  test('invalid type returns error', async () => {
+    const newInfo = { likes: 'lol' }
+    const id = await helper.getExistingId()
+
+    await api
+      .put(`/api/blogs/${id}`)
+      .send(newInfo)
+      .expect(400)
+  })
+})
