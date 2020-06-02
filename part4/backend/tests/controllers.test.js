@@ -91,3 +91,33 @@ describe('POST /api/blogs', () => {
       .expect(400)
   })
 })
+
+describe('DELETE /api/blogs/:id', () => {
+  test('existing blog is removed from database', async () => {
+    const id = await helper.getExistingId()
+    expect(id).toBeDefined()
+
+    let entry = await Blog.findById(id)
+    expect(entry).not.toBeNull()
+    
+    await api
+      .delete(`/api/blogs/${id}`)
+      .expect(204)
+    
+    entry = await Blog.findById(id)
+    expect(entry).toBeNull()
+  })
+
+  test('invalid id returns 400 error', async () => {
+    await api
+      .delete('/api/blogs/lol')
+      .expect(400)
+  })
+
+  test('removing nonexistent id behaves similar to removing existing id ', async () => {
+    const id = await helper.getNonExistentId()
+    await api
+      .delete(`/api/blogs/${id}`)
+      .expect(204)
+  })
+})

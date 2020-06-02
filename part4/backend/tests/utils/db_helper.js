@@ -7,7 +7,8 @@ let mongoServer;
 const setupTestDB = async () => {
   mongoServer = new MongoDBMemoryServer.MongoMemoryServer();
   const uri = await mongoServer.getUri()
-  await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+  await mongoose.connect(uri, { 
+    useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
 }
 
 const teardownTestDB = async () => {
@@ -23,8 +24,25 @@ const resetBlogs = async () => {
   await Promise.all(blogsToSave)
 }
 
+const getExistingId = async () => {
+  const entries = await Blog.find({})
+  if (entries.length > 0)
+    return entries[0].id
+  else
+    return undefined
+}
+
+const getNonExistentId = async () => {
+  const entry = new Blog({title: 'does', author: 'not', url: 'matter', likes: 0})
+  const saved = await entry.save()
+  await Blog.findByIdAndRemove(saved.id)
+  return saved.id
+}
+
 module.exports = {
   setupTestDB,
   teardownTestDB,
-  resetBlogs
+  resetBlogs,
+  getExistingId,
+  getNonExistentId
 }
