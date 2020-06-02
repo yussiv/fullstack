@@ -116,6 +116,9 @@ describe('DELETE /api/blogs/:id', () => {
 
   test('removing nonexistent id behaves similar to removing existing id ', async () => {
     const id = await helper.getNonExistentId()
+    const entry = await Blog.findById(id)
+    expect(entry).toBeNull()
+
     await api
       .delete(`/api/blogs/${id}`)
       .expect(204)
