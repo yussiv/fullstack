@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
+const crypto = require('../../utils/crypto')
 const Blog = require('../../models/blog')
+const User = require('../../models/user')
 const initialBlogs = require('./initial_blogs.json')
 const MongoDBMemoryServer = require('mongodb-memory-server')
 let mongoServer;
@@ -39,10 +41,21 @@ const getNonExistentId = async () => {
   return saved.id
 }
 
+const resetUsers = async () => {
+  await User.deleteMany({})
+  const user = new User({
+    name: 'Luke',
+    username: 'admin',
+    passwordHash: await crypto.encrypt('shhh')
+  })
+  await user.save()
+}
+
 module.exports = {
   setupTestDB,
   teardownTestDB,
   resetBlogs,
   getExistingId,
-  getNonExistentId
+  getNonExistentId,
+  resetUsers
 }

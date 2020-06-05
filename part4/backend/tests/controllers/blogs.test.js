@@ -1,8 +1,8 @@
 const supertest = require('supertest')
 const uuid = require('uuid').v1
-const Blog = require('../models/blog')
-const helper = require('./utils/db_helper')
-const app = require('../app')
+const Blog = require('../../models/blog')
+const helper = require('../utils/db_helper')
+const app = require('../../app')
 const api = supertest(app)
 
 beforeAll(async () => {
