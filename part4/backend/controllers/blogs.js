@@ -1,17 +1,21 @@
 const router = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const { NotAuthorizedError, NotAuthenticatedError} = require('../utils/error')
 
-router.get('/', async (request, response) => {
+router.get('/', async (req, res) => {
   const blogs = await Blog.find({}).populate('user', {name: 1, username: 1})
-  response.json(blogs)
+  res.json(blogs)
 })
 
-router.post('/', async (request, response) => {
-  const user = await User.findOne({})
+router.post('/', async (req, res) => {
+  if (!req.authenticated)
+    throw new NotAuthenticatedError()
+
+  const user = req.user
   
   const blog = new Blog({
-    ...request.body,
+    ...req.body,
 
     user: user._id
   })
@@ -20,22 +24,40 @@ router.post('/', async (request, response) => {
   user.blogs = user.blogs.concat(savedBlog._id)
   await user.save()
 
-  response.status(201).json(savedBlog)
+  res.status(201).json(savedBlog)
 })
 
-router.delete('/:id', async (request, response) => {
-  const id = request.params.id
+router.delete('/:id', async (req, res) => {
+  const id = req.params.id
+  if(!req.authenticated)
+    throw new NotAuthenticatedError()
+  
   const blog = await Blog.findByIdAndRemove(id)
-  if (blog)
-    await removeBlogFromUser(id, blog.user)
+  if (blog) {
+    const ownerId = blog.user.toString()
+    const userId = req.user.id.toString()
+    if(ownerId !== userId)
+      throw new NotAuthorizedError()
 
-  response.status(204).end()
+    await removeBlogFromUser(id, blog.user)
+  }
+  res.status(204).end()
 })
 
-router.put('/:id', async (request, response) => {
-  const id = request.params.id
-  const result = await Blog.findByIdAndUpdate(id, request.body, { new: true })
-  response.json(result)
+router.put('/:id', async (req, res) => {
+  if (!req.authenticated)
+    throw new NotAuthenticatedError()
+  
+  const id = req.params.id
+  const blog = await Blog.findById(id)
+  if (blog) {
+    const ownerId = blog.user.toString()
+    const userId = req.user._id.toString()
+    if(ownerId !== userId)
+      throw new NotAuthorizedError()
+  }
+  const result = await Blog.findByIdAndUpdate(id, req.body, { new: true })
+  res.json(result)
 })
 
 const removeBlogFromUser = async (blogId, userId) => {

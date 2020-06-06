@@ -3,8 +3,7 @@ const app = require('./app')
 const config = require('./utils/config')
 const mongoose = require('mongoose')
 
-mongoose.connect(config.MONGODB_URI, {
-  useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+mongoose.connect(config.MONGODB_URI, config.mongooseOptions)
 
 const server = http.createServer(app)
 

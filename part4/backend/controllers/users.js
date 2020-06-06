@@ -1,13 +1,7 @@
 const router = require('express').Router()
 const crypto = require('../utils/crypto')
 const User = require('../models/user')
-
-class PasswordValidationError extends Error { 
-  constructor(...args) { 
-    super(...args); 
-    this.name = 'PasswordValidationError'
-  }
-}
+const { PasswordValidationError } = require('../utils/error')
 
 router.post('/', async (req, res) => {
   const content = req.body

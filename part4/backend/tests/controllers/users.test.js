@@ -14,7 +14,7 @@ afterAll(async () => {
 })
 
 beforeEach(async () => {
-  await helper.resetUsers()
+  await helper.resetDB()
 })
 
 describe('POST /api/users', () => {
