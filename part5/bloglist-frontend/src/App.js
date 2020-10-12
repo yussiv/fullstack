@@ -13,8 +13,21 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    const savedUser = window.localStorage.getItem('user')
+    if (savedUser) {
+      setUser(JSON.parse(savedUser))
+    }
+  }, [])
+
   const handleLogin = (user) => {
+    window.localStorage.setItem('user', JSON.stringify(user))
     setUser(user)
+  }
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('user')
+    setUser(null)
   }
 
   return (
@@ -22,7 +35,10 @@ const App = () => {
       { user === null 
       ? <Login handleLogin={handleLogin} />
       : <div>
-          <p>{user.name} logged in</p>
+          <div>
+            {user.name} logged in
+            <button onClick={handleLogout}>Logout</button>
+          </div>
           <BlogList blogs={blogs} /> 
         </div>}
     </div>
