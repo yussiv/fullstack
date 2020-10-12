@@ -3,6 +3,7 @@ const { PasswordValidationError,
         NotAuthenticatedError} = require('../utils/error')
 
 module.exports = (err, req, res, next) => {
+  console.log(err)
   if (process.env.NODE_ENV !== 'test')
     console.log(err.name, err.message)
   

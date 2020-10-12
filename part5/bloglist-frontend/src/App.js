@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BlogList } from './components/Blog'
+import { BlogList, NewBlogForm } from './components/Blog'
 import Login from './components/Login'
 import blogService from './services/blogs'
 
@@ -14,20 +14,28 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const savedUser = window.localStorage.getItem('user')
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
+    const userJSON = window.localStorage.getItem('user')
+    if (userJSON) {
+      const savedUser = JSON.parse(userJSON)
+      blogService.setToken(savedUser.token)
+      setUser(savedUser)
     }
   }, [])
 
   const handleLogin = (user) => {
     window.localStorage.setItem('user', JSON.stringify(user))
+    blogService.setToken(user.token)
     setUser(user)
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem('user')
+    blogService.setToken('')
     setUser(null)
+  }
+
+  const handleBlogCreated = (newBlog) => {
+    setBlogs( [...blogs, newBlog])
   }
 
   return (
@@ -39,6 +47,7 @@ const App = () => {
             {user.name} logged in
             <button onClick={handleLogout}>Logout</button>
           </div>
+          <NewBlogForm handleBlogCreated={handleBlogCreated} />
           <BlogList blogs={blogs} /> 
         </div>}
     </div>
