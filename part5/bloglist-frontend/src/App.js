@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { BlogList, NewBlogForm } from './components/Blog'
 import Login from './components/Login'
+import { Notifications } from './components/Notification'
 import blogService from './services/blogs'
+import './App.css'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
+  const [notifications, setNotifications] = useState([])
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -36,12 +39,27 @@ const App = () => {
 
   const handleBlogCreated = (newBlog) => {
     setBlogs( [...blogs, newBlog])
+    addNotification(
+      `A new blog ${newBlog.title} by ${newBlog.author} added`,
+      'success'
+    )
+  }
+
+  const addNotification = (text, type) => {
+    setNotifications(n => [...n, {
+      id: new Date().valueOf(), text, type
+    }])
+  }
+
+  const removeNotification = (id) => {
+    setNotifications(n => n.filter(i => i.id !== id))
   }
 
   return (
     <div>
+      <Notifications notifications={notifications} handleRemove={removeNotification} />
       { user === null 
-      ? <Login handleLogin={handleLogin} />
+      ? <Login handleLogin={handleLogin} addNotification={addNotification} />
       : <div>
           <div>
             {user.name} logged in

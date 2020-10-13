@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import loginService from '../services/login'
 
-const Login = ({ handleLogin }) => {
+const Login = ({ handleLogin, addNotification }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [errorMsg, setErrorMsg] = useState('')
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -12,11 +11,9 @@ const Login = ({ handleLogin }) => {
       const user = await loginService.login(username, password)
       handleLogin(user)
     } catch (err) {
-      setErrorMsg(err.message)
+      addNotification(err.response.data.error, 'failure')
     }
   }
-
-  const ErrorMessage = () => (errorMsg && <p>{errorMsg}</p>)
   
   return (
     <div>
@@ -41,7 +38,6 @@ const Login = ({ handleLogin }) => {
         </div>
         <input type="submit" value="Login"/>
       </form>
-      <ErrorMessage />
     </div>
   )
 }
