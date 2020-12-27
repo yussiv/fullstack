@@ -41,12 +41,16 @@ const App = () => {
   }
 
   const handleBlogCreated = (newBlog) => {
-    setBlogs( [...blogs, newBlog])
+    setBlogs([...blogs, newBlog])
     addNotification(
       `A new blog ${newBlog.title} by ${newBlog.author} added`,
       'success'
     )
     newBlogToggleRef.current.hide()
+  }
+
+  const handleBlogUpdated = (updatedBlog) => {
+    setBlogs(blogs.map((blog) => blog.id === updatedBlog.id ? updatedBlog : blog))
   }
 
   const addNotification = (text, type) => {
@@ -72,7 +76,7 @@ const App = () => {
           <Togglable buttonText="Create new blog" ref={newBlogToggleRef}>
             <NewBlogForm handleBlogCreated={handleBlogCreated} />
           </Togglable>
-          <BlogList blogs={blogs} /> 
+          <BlogList blogs={blogs} handleBlogUpdated={handleBlogUpdated} /> 
         </div>}
     </div>
   )

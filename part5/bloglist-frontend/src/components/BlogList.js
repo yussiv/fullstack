@@ -1,13 +1,16 @@
 import React from 'react'
 import Blog from './Blog'
 
-const BlogList = ({ blogs }) => (
-  <div>
-    <h2>blogs</h2>
-    {blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} />
-    )}
-  </div>
-)
+const BlogList = ({ blogs, handleBlogUpdated }) => {
+  const sortedBlogs = [...blogs].sort((a, b) => a.likes < b.likes)
+  return (
+    <div>
+      <h2>blogs</h2>
+      {sortedBlogs.map(blog =>
+        <Blog key={blog.id} blog={blog} handleBlogUpdated={handleBlogUpdated} />
+      )}
+    </div>
+  )
+}
 
 export default BlogList
