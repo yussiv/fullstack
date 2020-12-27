@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { BlogList } from './components/Blog'
+import BlogList from './components/BlogList'
 import NewBlogForm from './components/NewBlogForm'
 import Login from './components/Login'
 import { Notifications } from './components/Notification'

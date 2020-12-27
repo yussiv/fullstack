@@ -1,18 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const Blog = ({ blog }) => (
-  <div>
-    {blog.title} {blog.author}
-  </div>
-)
+const Blog = ({ blog }) => {
+  const [expanded, setExpanded] = useState(false)
+  const toggleExpanded = () => {
+    setExpanded(!expanded)
+  }
+  return (
+    <div className="blog-entry">
+      { expanded
+        ? (
+          <>
+            {blog.title} <button onClick={toggleExpanded}>show less</button>
+            <br />
+            {blog.url} 
+            <br />
+            likes {blog.likes} <button>like</button>
+            <br />
+            {blog.author}
+          </>
+        )
+        : (
+          <>
+            {blog.title} {blog.author} 
+            <button onClick={toggleExpanded}>show more</button>
+          </>
+        )
+      }
+    </div>
+  )
+}
 
-const BlogList = ({ blogs }) => (
-  <div>
-    <h2>blogs</h2>
-    {blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} />
-    )}
-  </div>
-)
-
-export { Blog, BlogList }
+export default Blog
