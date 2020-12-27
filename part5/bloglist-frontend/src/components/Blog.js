@@ -1,9 +1,15 @@
 import React, { useState } from 'react'
+import blogService from '../services/blogs'
 
 const Blog = ({ blog }) => {
   const [expanded, setExpanded] = useState(false)
+  const [likes, setLikes] = useState(blog.likes)
   const toggleExpanded = () => {
     setExpanded(!expanded)
+  }
+  const handleLikeIncrease = async () => {
+    const updatedBlog = await blogService.update({ ...blog, likes: likes + 1 })
+    setLikes(updatedBlog.likes)
   }
   return (
     <div className="blog-entry">
@@ -14,7 +20,7 @@ const Blog = ({ blog }) => {
             <br />
             {blog.url} 
             <br />
-            likes {blog.likes} <button>like</button>
+            likes {likes} <button onClick={handleLikeIncrease}>like</button>
             <br />
             {blog.author}
           </>
