@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { BlogList, NewBlogForm } from './components/Blog'
+import { BlogList } from './components/Blog'
+import NewBlogForm from './components/NewBlogForm'
 import Login from './components/Login'
 import { Notifications } from './components/Notification'
 import blogService from './services/blogs'
@@ -10,7 +11,7 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [notifications, setNotifications] = useState([])
-  const newFormToggleRef = useRef()
+  const newBlogToggleRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -45,7 +46,7 @@ const App = () => {
       `A new blog ${newBlog.title} by ${newBlog.author} added`,
       'success'
     )
-    newFormToggleRef.current.hide()
+    newBlogToggleRef.current.hide()
   }
 
   const addNotification = (text, type) => {
@@ -68,7 +69,7 @@ const App = () => {
             {user.name} logged in
             <button onClick={handleLogout}>Logout</button>
           </div>
-          <Togglable buttonText="Create new blog" ref={newFormToggleRef}>
+          <Togglable buttonText="Create new blog" ref={newBlogToggleRef}>
             <NewBlogForm handleBlogCreated={handleBlogCreated} />
           </Togglable>
           <BlogList blogs={blogs} /> 
