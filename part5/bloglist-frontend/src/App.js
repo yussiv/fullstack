@@ -13,11 +13,6 @@ const App = () => {
   const [notifications, setNotifications] = useState([])
   const newBlogToggleRef = useRef()
 
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
-  }, [])
 
   useEffect(() => {
     const userJSON = window.localStorage.getItem('user')
@@ -26,6 +21,14 @@ const App = () => {
       blogService.setToken(savedUser.token)
       setUser(savedUser)
     }
+  }, [])
+
+  useEffect(() => {
+    const getBlogs = async () => {
+      const allBlogs = await blogService.getAll()
+      setBlogs(allBlogs)
+    }
+    getBlogs()
   }, [])
 
   const handleLogin = (user) => {
@@ -53,6 +56,10 @@ const App = () => {
     setBlogs(blogs.map((blog) => blog.id === updatedBlog.id ? updatedBlog : blog))
   }
 
+  const handleBlogRemoved = (removedBlog) => {
+    setBlogs(blogs.filter((blog) => blog.id !== removedBlog.id))
+  }
+
   const addNotification = (text, type) => {
     setNotifications(n => [...n, {
       id: new Date().valueOf(), text, type
@@ -76,7 +83,12 @@ const App = () => {
           <Togglable buttonText="Create new blog" ref={newBlogToggleRef}>
             <NewBlogForm handleBlogCreated={handleBlogCreated} />
           </Togglable>
-          <BlogList blogs={blogs} handleBlogUpdated={handleBlogUpdated} /> 
+          <BlogList
+            blogs={blogs}
+            handleBlogUpdated={handleBlogUpdated}
+            handleBlogRemoved={handleBlogRemoved}
+            user={user}
+          /> 
         </div>}
     </div>
   )
