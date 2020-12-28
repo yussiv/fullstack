@@ -9,8 +9,7 @@ const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved, user }) => {
     setExpanded(!expanded)
   }
   const handleLikeIncrease = async () => {
-    const updatedBlog = await blogService.update({ ...blog, likes: likes + 1 })
-    handleBlogUpdated(updatedBlog)
+    handleBlogUpdated({ ...blog, likes: likes + 1 })
   }
   const handleRemove = async () => {
     if (window.confirm(`Remove blog '${title}' by ${author}?`)) {
@@ -34,7 +33,9 @@ const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved, user }) => {
           <>
             <div className="title">{title} <button onClick={toggleExpanded}>show less</button></div>
             <div className="url">{url}</div>
-            <div className="likes">likes {likes} <button onClick={handleLikeIncrease}>like</button></div>
+            <div className="likes">
+              likes {likes}
+              <button onClick={handleLikeIncrease} className="button-like">like</button></div>
             <div className="author">{author}</div>
             <RemoveButton />
           </>

@@ -52,8 +52,9 @@ const App = () => {
     newBlogToggleRef.current.hide()
   }
 
-  const handleBlogUpdated = (updatedBlog) => {
-    setBlogs(blogs.map((blog) => blog.id === updatedBlog.id ? updatedBlog : blog))
+  const handleBlogUpdated = async (updatedBlog) => {
+    const responseBlog = await blogService.update(updatedBlog)
+    setBlogs(blogs.map((blog) => blog.id === updatedBlog.id ? responseBlog : blog))
   }
 
   const handleBlogRemoved = (removedBlog) => {

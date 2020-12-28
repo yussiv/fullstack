@@ -1,18 +1,21 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
+import { prettyDOM } from '@testing-library/dom'
 import Blog from './Blog'
 
 describe('<Blog />', () => {
   let component
+  let updateMock
 
   beforeEach(() => {
+    updateMock = jest.fn()
     component = render(
       <Blog
         blog={{ title: 'blogTitle', author: 'tester', url: 'http', likes: 42 }}
         user={{}}
         handleBlogRemoved={() => null}
-        handleBlogUpdated={() => null}
+        handleBlogUpdated={updateMock}
       />
     )
   })
@@ -48,4 +51,14 @@ describe('<Blog />', () => {
     ).toBeDefined()
   })
 
+  test('clicking like button invokes update function', () => {
+    const showButton = component.getByText('show more')
+    fireEvent.click(showButton)
+
+    const likeButton = component.container.querySelector('.button-like')
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+
+    expect(updateMock.mock.calls).toHaveLength(2)
+  })
 })
