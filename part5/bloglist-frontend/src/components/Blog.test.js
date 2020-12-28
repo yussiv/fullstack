@@ -35,4 +35,17 @@ describe('<Blog />', () => {
     ).toBeNull()
   })
 
+  test('shows likes and url after show button is clicked', () => {
+    const button = component.getByText('show more')
+    fireEvent.click(button)
+
+    expect(
+      component.container.querySelector('.url')
+    ).toBeDefined()
+
+    expect(
+      component.container.querySelector('.likes')
+    ).toBeDefined()
+  })
+
 })
