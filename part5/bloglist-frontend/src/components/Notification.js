@@ -8,7 +8,7 @@ const Notification = ({ notification, handleRemove }) => {
       timer = setTimeout(() => handleRemove(notification.id), interval)
     else
       handleRemove(notification.id)
-    
+
     return (() => {
       if (timer)
         clearTimeout(timer)
@@ -24,11 +24,10 @@ const Notifications = ({ notifications, handleRemove }) => (
   notifications.map((n) => (
     <Notification
       key={n.id}
-      notification={n} 
+      notification={n}
       handleRemove={handleRemove}
-      />
-    )
-  )
+    />
+  ))
 )
 
 export { Notification, Notifications }

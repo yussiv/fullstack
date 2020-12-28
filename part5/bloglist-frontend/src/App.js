@@ -73,9 +73,9 @@ const App = () => {
   return (
     <div>
       <Notifications notifications={notifications} handleRemove={removeNotification} />
-      { user === null 
-      ? <Login handleLogin={handleLogin} addNotification={addNotification} />
-      : <div>
+      { user === null
+        ? <Login handleLogin={handleLogin} addNotification={addNotification} />
+        : <div>
           <div>
             {user.name} logged in
             <button onClick={handleLogout}>Logout</button>
@@ -88,7 +88,7 @@ const App = () => {
             handleBlogUpdated={handleBlogUpdated}
             handleBlogRemoved={handleBlogRemoved}
             user={user}
-          /> 
+          />
         </div>}
     </div>
   )

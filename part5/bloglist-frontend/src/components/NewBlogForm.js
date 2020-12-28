@@ -24,27 +24,27 @@ const NewBlogForm = ({ handleBlogCreated }) => {
       <h2>Create New Blog</h2>
       <div>
         <label htmlFor="title">Title</label>
-        <input 
+        <input
           id="title"
           value={title}
-          onChange={({target}) => { setTitle(target.value) }}
-          />
+          onChange={({ target }) => { setTitle(target.value) }}
+        />
       </div>
       <div>
         <label htmlFor="author">Author</label>
-        <input 
+        <input
           id="author"
           value={author}
-          onChange={({target}) => { setAuthor(target.value) }}
-          />
+          onChange={({ target }) => { setAuthor(target.value) }}
+        />
       </div>
       <div>
         <label htmlFor="url">URL</label>
-        <input 
+        <input
           id="url"
           value={url}
-          onChange={({target}) => { setUrl(target.value) }}
-          />
+          onChange={({ target }) => { setUrl(target.value) }}
+        />
       </div>
       <input type="submit" value="Create" />
     </form>

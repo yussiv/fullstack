@@ -34,7 +34,7 @@ const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved, user }) => {
           <>
             {title} <button onClick={toggleExpanded}>show less</button>
             <br />
-            {url} 
+            {url}
             <br />
             likes {likes} <button onClick={handleLikeIncrease}>like</button>
             <br />
@@ -45,7 +45,7 @@ const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved, user }) => {
         )
         : (
           <>
-            {title} {author} 
+            {title} {author}
             <button onClick={toggleExpanded}>show more</button>
           </>
         )

@@ -14,7 +14,7 @@ const Login = ({ handleLogin, addNotification }) => {
       addNotification(err.response.data.error, 'failure')
     }
   }
-  
+
   return (
     <div>
       <h1>Login</h1>
@@ -23,9 +23,9 @@ const Login = ({ handleLogin, addNotification }) => {
           <label htmlFor="username">Username</label>
           <input
             id="username"
-            value={username} 
-            onChange={({target}) => { setUsername(target.value)}}
-            />
+            value={username}
+            onChange={({ target }) => { setUsername(target.value)}}
+          />
         </div>
         <div>
           <label htmlFor="password">Password</label>
@@ -33,8 +33,8 @@ const Login = ({ handleLogin, addNotification }) => {
             id="password"
             type="password"
             value={password}
-            onChange={({target}) => { setPassword(target.value)}}
-            />
+            onChange={({ target }) => { setPassword(target.value)}}
+          />
         </div>
         <input type="submit" value="Login"/>
       </form>
