@@ -32,20 +32,17 @@ const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved, user }) => {
       { expanded
         ? (
           <>
-            {title} <button onClick={toggleExpanded}>show less</button>
-            <br />
-            {url}
-            <br />
-            likes {likes} <button onClick={handleLikeIncrease}>like</button>
-            <br />
-            {author}
-            <br />
+            <div className="title">{title} <button onClick={toggleExpanded}>show less</button></div>
+            <div className="url">{url}</div>
+            <div className="likes">likes {likes} <button onClick={handleLikeIncrease}>like</button></div>
+            <div className="author">{author}</div>
             <RemoveButton />
           </>
         )
         : (
           <>
-            {title} {author}
+            <span className="title">{title}</span>
+            <span className="author">{author}</span>
             <button onClick={toggleExpanded}>show more</button>
           </>
         )
