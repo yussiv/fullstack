@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
 
 const NewBlogForm = ({ handleBlogCreated }) => {
   const [title, setTitle] = useState('')
@@ -14,13 +13,12 @@ const NewBlogForm = ({ handleBlogCreated }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const newBlog = await blogService.create({ title, author, url })
+    handleBlogCreated({ title, author, url })
     clearForm()
-    handleBlogCreated(newBlog)
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form id="new-blog" onSubmit={handleSubmit}>
       <h2>Create New Blog</h2>
       <div>
         <label htmlFor="title">Title</label>

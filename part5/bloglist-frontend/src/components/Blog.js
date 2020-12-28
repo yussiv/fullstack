@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import blogService from '../services/blogs'
 
 const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved, user }) => {
   const [expanded, setExpanded] = useState(false)
@@ -13,7 +12,6 @@ const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved, user }) => {
   }
   const handleRemove = async () => {
     if (window.confirm(`Remove blog '${title}' by ${author}?`)) {
-      await blogService.remove(blog)
       handleBlogRemoved(blog)
     }
   }
@@ -42,8 +40,7 @@ const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved, user }) => {
         )
         : (
           <>
-            <span className="title">{title}</span>
-            <span className="author">{author}</span>
+            <span className="title">{title}</span> <span className="author">{author}</span>
             <button onClick={toggleExpanded}>show more</button>
           </>
         )

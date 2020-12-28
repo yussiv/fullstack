@@ -43,7 +43,8 @@ const App = () => {
     setUser(null)
   }
 
-  const handleBlogCreated = (newBlog) => {
+  const handleBlogCreated = async (blog) => {
+    const newBlog = await blogService.create(blog)
     setBlogs([...blogs, newBlog])
     addNotification(
       `A new blog ${newBlog.title} by ${newBlog.author} added`,
@@ -57,8 +58,9 @@ const App = () => {
     setBlogs(blogs.map((blog) => blog.id === updatedBlog.id ? responseBlog : blog))
   }
 
-  const handleBlogRemoved = (removedBlog) => {
-    setBlogs(blogs.filter((blog) => blog.id !== removedBlog.id))
+  const handleBlogRemoved = async (blogToRemove) => {
+    await blogService.remove(blogToRemove)
+    setBlogs(blogs.filter((blog) => blog.id !== blogToRemove.id))
   }
 
   const addNotification = (text, type) => {
