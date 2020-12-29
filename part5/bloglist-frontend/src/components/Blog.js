@@ -18,7 +18,7 @@ const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved, user }) => {
   const RemoveButton = () => {
     if (blog.user === user.id || blog.user.id === user.id) {
       return (
-        <button onClick={handleRemove} style={{ backgroundColor: '#ffe9e9' }}>remove</button>
+        <button onClick={handleRemove} className="button-remove">remove</button>
       )
     }
     return null

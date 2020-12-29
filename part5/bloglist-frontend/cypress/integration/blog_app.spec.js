@@ -66,5 +66,32 @@ describe('Blog app', function() {
         .contains('existing blog')
         .parent().contains('likes 1')
     })
+
+    it('A blog can be deleted by the user who added it', function() {
+      cy.get('.blog-entry')
+        .contains('existing blog')
+        .parent().contains('show more').click()
+
+      cy.get('.blog-entry')
+        .contains('existing blog')
+        .parent().get('.button-remove').click()
+
+      cy.get('.blog-entry')
+        .should('not.exist')
+    })
+
+    it('A blog can not be deleted by other users', function() {
+      cy.createUser('other', 'dude', 'pass')
+      cy.login('other', 'pass')
+      cy.visit('http://localhost:3000')
+
+      cy.get('.blog-entry')
+        .contains('existing blog')
+        .parent().contains('show more').click()
+
+      cy.get('.blog-entry')
+        .contains('existing blog')
+        .parent().get('.button-remove').should('not.exist')
+    })
   })
 })

@@ -25,3 +25,7 @@ button {
   border: 1px solid #ccc;
   border-radius: 3px;
 }
+
+.button-remove {
+  background-color: #ffe9e9;
+}
