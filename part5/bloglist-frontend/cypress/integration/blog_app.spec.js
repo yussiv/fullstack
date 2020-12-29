@@ -31,4 +31,25 @@ describe('Blog app', function() {
         .should('have.css', 'borderColor', 'rgb(255, 0, 0)')
     })
   })
+
+  describe.only('When logged in', function() {
+    beforeEach(function() {
+      cy.login('testie', 'pass')
+      cy.visit('http://localhost:3000')
+    })
+
+    it('A blog can be created', function() {
+      cy.contains('Create new blog')
+        .click()
+      cy.get('#title').type('new title')
+      cy.get('#author').type('new author')
+      cy.get('#url').type('internets')
+      cy.get('#new-blog').submit()
+
+      cy.contains('A new blog new title by new author added')
+      cy.get('.blog-entry')
+        .contains('new title new author')
+        .contains('show more')
+    })
+  })
 })
