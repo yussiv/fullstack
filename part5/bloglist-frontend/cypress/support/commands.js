@@ -31,10 +31,22 @@ Cypress.Commands.add('createUser', (username, name, password) => {
 })
 
 Cypress.Commands.add('login', (username, password) => {
-  cy.request('POST', 'http://localhost:3003/login', {
-    username, password
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:3003/login',
+    body: { username, password }
   }).then(response => {
-    expect(response).property('status').to.equal(200)
+    // expect(response).property('status').to.equal(200)
     window.localStorage.setItem('user', JSON.stringify(response.body))
+  })
+})
+
+Cypress.Commands.add('addBlog', (title, author, url) => {
+  const user = JSON.parse(window.localStorage.getItem('user'))
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:3003/api/blogs',
+    body: { title, author, url },
+    headers: { 'Authorization': 'bearer ' + user.token },
   })
 })

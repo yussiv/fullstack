@@ -35,6 +35,7 @@ describe('Blog app', function() {
   describe.only('When logged in', function() {
     beforeEach(function() {
       cy.login('testie', 'pass')
+      cy.addBlog('existing blog', 'someone', 'http')
       cy.visit('http://localhost:3000')
     })
 
@@ -50,6 +51,20 @@ describe('Blog app', function() {
       cy.get('.blog-entry')
         .contains('new title new author')
         .contains('show more')
+    })
+
+    it('A blog can be liked', function() {
+      cy.get('.blog-entry')
+        .contains('existing blog')
+        .parent().contains('show more').click()
+
+      cy.get('.blog-entry')
+        .contains('existing blog')
+        .parent().get('.button-like').click()
+
+      cy.get('.blog-entry')
+        .contains('existing blog')
+        .parent().contains('likes 1')
     })
   })
 })
