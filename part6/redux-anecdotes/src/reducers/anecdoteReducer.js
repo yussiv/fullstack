@@ -27,6 +27,8 @@ const reducer = (state = initialState, action) => {
         ? { ...item, votes: item.votes + 1 }
         : item
       ))
+    case 'ADD_NEW':
+      return [...state, asObject(action.data.content)]
     default:
       return state
   }
@@ -34,6 +36,10 @@ const reducer = (state = initialState, action) => {
 
 export const addVote = (id) => {
   return { type: 'VOTE', data: { id }}
+}
+
+export const addAnecdote = (content) => {
+  return { type: 'ADD_NEW', data: { content }}
 }
 
 export default reducer
