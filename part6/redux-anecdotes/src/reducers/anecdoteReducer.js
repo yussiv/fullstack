@@ -26,7 +26,7 @@ const reducer = (state = initialState, action) => {
         item.id === action.data.id
         ? { ...item, votes: item.votes + 1 }
         : item
-      ))
+      )).sort((a, b) => b.votes - a.votes)
     case 'ADD_NEW':
       return [...state, asObject(action.data.content)]
     default:
