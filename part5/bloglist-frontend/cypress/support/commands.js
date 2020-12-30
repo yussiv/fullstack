@@ -50,3 +50,13 @@ Cypress.Commands.add('addBlog', (title, author, url) => {
     headers: { 'Authorization': 'bearer ' + user.token },
   })
 })
+
+Cypress.Commands.add('addBlogWithLikes', (title, author, url, likes) => {
+  const user = JSON.parse(window.localStorage.getItem('user'))
+  cy.request({
+    method: 'POST',
+    url: 'http://localhost:3003/api/blogs',
+    body: { title, author, url, likes },
+    headers: { 'Authorization': 'bearer ' + user.token },
+  })
+})

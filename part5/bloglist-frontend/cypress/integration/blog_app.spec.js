@@ -32,7 +32,7 @@ describe('Blog app', function() {
     })
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function() {
     beforeEach(function() {
       cy.login('testie', 'pass')
       cy.addBlog('existing blog', 'someone', 'http')
@@ -92,6 +92,21 @@ describe('Blog app', function() {
       cy.get('.blog-entry')
         .contains('existing blog')
         .parent().get('.button-remove').should('not.exist')
+    })
+
+    it('Blogs are in descending order by likes', function() {
+      cy.addBlogWithLikes('title1', 'author1', 'url1', 1)
+      cy.addBlogWithLikes('title2', 'author2', 'url2', 6)
+      cy.addBlogWithLikes('title3', 'author3', 'url3', 2)
+      cy.addBlogWithLikes('title4', 'author4', 'url4', 4)
+
+      cy.reload()
+
+      cy.get('.blog-entry .title')
+        .then(blogs => {
+          const blogTitles = blogs.toArray().map(title => title.innerText)
+          expect(blogTitles).to.eql(['title2', 'title4', 'title3', 'title1', 'existing blog'])
+        })
     })
   })
 })
