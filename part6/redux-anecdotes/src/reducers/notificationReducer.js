@@ -15,8 +15,7 @@ const reducer = (state = initialState, action) => {
 
 let id = 0
 
-// unfortunate function signature in order to contain timeout logic inside reducer
-export const addNotification = (dispatch, content) => {
+export const setNotification = (content, seconds) => async (dispatch) => {
   dispatch({
     type: 'SHOW_NOTIFICATION',
     data: {
@@ -28,7 +27,7 @@ export const addNotification = (dispatch, content) => {
     dispatch({
       type: 'HIDE_NOTIFICATION', id
     })
-  }, 5000, id)
+  }, 1000 * seconds, id)
   id++
 }
 export default reducer

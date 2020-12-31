@@ -1,5 +1,5 @@
 import anecdoteService from '../services/anecdote'
-import { addNotification } from '../reducers/notificationReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 const reducer = (state = [], action) => {
   switch (action.type) {
@@ -25,7 +25,7 @@ export const addVote = (anecdote) => async (dispatch) => {
     id: updatedAnecdote.id
   })
   const notification = `you voted '${updatedAnecdote.content}'`
-  addNotification(dispatch, notification)
+  dispatch(setNotification(notification, 5))
 }
 
 export const addAnecdote = (content) => async (dispatch) => {
@@ -35,7 +35,7 @@ export const addAnecdote = (content) => async (dispatch) => {
     data: newAnecdote
   })
   const notification = `you added '${newAnecdote.content}'`
-  addNotification(dispatch, notification)
+  dispatch(setNotification(notification, 3))
 }
 
 export const initAnecdotes = () => async (dispatch) => {
