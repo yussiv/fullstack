@@ -1,4 +1,5 @@
 import anecdoteService from '../services/anecdote'
+import { addNotification } from '../reducers/notificationReducer'
 
 const reducer = (state = [], action) => {
   switch (action.type) {
@@ -21,8 +22,14 @@ export const addVote = (id) => {
   return { type: 'VOTE', id }
 }
 
-export const addAnecdote = (data) => {
-  return { type: 'ADD_NEW', data }
+export const addAnecdote = (content) => async (dispatch) => {
+  const newAnecdote = await anecdoteService.add({ content, votes: 0 })
+  dispatch({
+    type: 'ADD_NEW',
+    data: newAnecdote
+  })
+  const notification = `you added '${newAnecdote.content}'`
+  addNotification(dispatch, notification)
 }
 
 export const initAnecdotes = () => async (dispatch) => {
