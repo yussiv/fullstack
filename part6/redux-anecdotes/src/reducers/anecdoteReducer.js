@@ -18,8 +18,14 @@ const reducer = (state = [], action) => {
   }
 }
 
-export const addVote = (id) => {
-  return { type: 'VOTE', id }
+export const addVote = (anecdote) => async (dispatch) => {
+  const updatedAnecdote = await anecdoteService.put({ ...anecdote, votes: anecdote.votes + 1 })
+  dispatch({
+    type: 'VOTE',
+    id: updatedAnecdote.id
+  })
+  const notification = `you voted '${updatedAnecdote.content}'`
+  addNotification(dispatch, notification)
 }
 
 export const addAnecdote = (content) => async (dispatch) => {
