@@ -4,7 +4,6 @@ const reducer = (state = initialState, action) => {
     case 'SHOW_NOTIFICATION':
       return action.data
     case 'HIDE_NOTIFICATION':
-      console.log(state)
       if (state.id !== action.id)
         return state
       else
