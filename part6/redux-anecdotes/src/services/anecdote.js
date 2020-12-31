@@ -10,4 +10,13 @@ const getAll = async () => {
   }
 }
 
-export default { getAll }
+const add = async (anecdote) => {
+  try {
+    const response = await axios.post(`${baseUrl}/anecdotes`, anecdote)
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export default { getAll, add }
