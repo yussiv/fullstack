@@ -1,3 +1,5 @@
+import anecdoteService from '../services/anecdote'
+
 const reducer = (state = [], action) => {
   switch (action.type) {
     case 'VOTE':
@@ -23,8 +25,12 @@ export const addAnecdote = (data) => {
   return { type: 'ADD_NEW', data }
 }
 
-export const setAnecdotes = (data) => {
-  return { type: 'SET_ANECDOTES', data }
+export const initAnecdotes = () => async (dispatch) => {
+  const anecdotes = await anecdoteService.getAll()
+  dispatch({
+    type: 'SET_ANECDOTES',
+    data: anecdotes
+  })
 }
 
 export default reducer
