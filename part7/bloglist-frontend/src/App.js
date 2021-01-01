@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import BlogList from './components/BlogList'
 import NewBlogForm from './components/NewBlogForm'
 import Login from './components/Login'
 import Notifications from './components/Notifications'
-import blogService from './services/blogs'
+import blogService from './services/blog'
 import './App.css'
 import Togglable from './components/Togglable'
-import { addNotification } from './reducers/notification'
+import { addBlog, initBlogs } from './reducers/blog'
 
 const App = () => {
   const dispatch = useDispatch()
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector(state => state.blogs)
   const [user, setUser] = useState(null)
   const newBlogToggleRef = useRef()
 
@@ -26,12 +26,8 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    const getBlogs = async () => {
-      const allBlogs = await blogService.getAll()
-      setBlogs(allBlogs)
-    }
-    getBlogs()
-  }, [])
+    dispatch(initBlogs())
+  }, [dispatch])
 
   const handleLogin = (user) => {
     window.localStorage.setItem('user', JSON.stringify(user))
@@ -46,23 +42,18 @@ const App = () => {
   }
 
   const handleBlogCreated = async (blog) => {
-    const newBlog = await blogService.create(blog)
-    setBlogs([...blogs, newBlog])
-    dispatch(addNotification(
-      `A new blog ${newBlog.title} by ${newBlog.author} added`,
-      'success'
-    ))
+    dispatch(addBlog(blog))
     newBlogToggleRef.current.hide()
   }
 
   const handleBlogUpdated = async (updatedBlog) => {
     const responseBlog = await blogService.update(updatedBlog)
-    setBlogs(blogs.map((blog) => blog.id === updatedBlog.id ? responseBlog : blog))
+    // setBlogs(blogs.map((blog) => blog.id === updatedBlog.id ? responseBlog : blog))
   }
 
   const handleBlogRemoved = async (blogToRemove) => {
     await blogService.remove(blogToRemove)
-    setBlogs(blogs.filter((blog) => blog.id !== blogToRemove.id))
+    // setBlogs(blogs.filter((blog) => blog.id !== blogToRemove.id))
   }
 
   return (

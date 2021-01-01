@@ -2,7 +2,7 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 
 const Notifications = () => {
-  const notifications = useSelector(state => state)
+  const notifications = useSelector(state => state.notifications)
 
   return notifications.map((notification) => (
     <div
