@@ -68,6 +68,7 @@ router.put('/:id', async (req, res) => {
   const result = await Blog
     .findByIdAndUpdate(id, updatedBlog, { new: true })
     .populate('user', {name: 1, username: 1})
+    .populate('comments', {content: 1})
   res.json(result)
 })
 
@@ -80,8 +81,8 @@ const removeBlogFromUser = async (blogId, userId) => {
 }
 
 router.post('/:id/comments', async (req, res) => {
-  // if (!req.authenticated)
-  //   throw new NotAuthenticatedError()
+  if (!req.authenticated)
+    throw new NotAuthenticatedError()
 
   const id = req.params.id
   const blog = await Blog.findById(id)

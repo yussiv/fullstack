@@ -21,7 +21,9 @@ const create = async (blog) => {
 
 const update = async (blog) => {
   const response = await axios.put(`${baseUrl}/${blog.id}`, {
-    ...blog, user: blog.user.id
+    ...blog,
+    user: blog.user.id,
+    comments: blog.comments.map(c => c.id)
   }, axiosConfig)
   return response.data
 }
@@ -31,4 +33,13 @@ const remove = async (blog) => {
   return response.data
 }
 
-export default { getAll, create, setToken, update, remove }
+const addComment = async (blogId, content) => {
+  const response = await axios.post(
+    `${baseUrl}/${blogId}/comments`,
+    { content },
+    axiosConfig
+  )
+  return response.data
+}
+
+export default { getAll, create, setToken, update, remove, addComment }

@@ -60,13 +60,27 @@ export const updateBlog = (blog) => async (dispatch) => {
 export const removeBlog = (blog) => async (dispatch) => {
   try {
     await blogService.remove(blog)
-
     dispatch({
       type: 'REMOVE_BLOG',
       id: blog.id
     })
   } catch (error) {
     dispatch(addNotification(`remove failed: ${error.message}`, 'failure'))
+  }
+}
+
+export const addComment = (blog, content) => async (dispatch) => {
+  try {
+    const newComment = await blogService.addComment(blog.id, content)
+    dispatch({
+      type: 'UPDATE_BLOG',
+      data: {
+        ...blog,
+        comments: blog.comments.concat(newComment)
+      }
+    })
+  } catch (error) {
+    dispatch(addNotification(`comment add failed: ${error.message}`, 'failure'))
   }
 }
 
