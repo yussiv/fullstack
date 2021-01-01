@@ -10,13 +10,17 @@ import './App.css'
 import { initBlogs } from './reducers/blog'
 import { initLogin, unsetLogin } from './reducers/login'
 import { fetchUsers } from './reducers/user'
+import BlogInfoView from './views/BlogInfoView'
 
 const App = () => {
   const dispatch = useDispatch()
   const login = useSelector(state => state.login)
   const users = useSelector(state => state.users)
-  const routeMatch = useRouteMatch('/users/:id')
-  const userId = routeMatch ? routeMatch.params.id : null
+  const blogs = useSelector(state => state.blogs)
+  const userIdMatch = useRouteMatch('/users/:id')
+  const blogIdMatch = useRouteMatch('/blogs/:id')
+  const userId = userIdMatch ? userIdMatch.params.id : null
+  const blogId = blogIdMatch ? blogIdMatch.params.id : null
 
   useEffect(() => {
     dispatch(initBlogs())
@@ -35,7 +39,7 @@ const App = () => {
     </div>
   )
 
-  const AuthorizedContent = ({ loggedIn, children }) => (
+  const AuthenticatedContent = ({ loggedIn, children }) => (
     <div>
       {loggedIn ? children : <Login />}
     </div>
@@ -45,9 +49,12 @@ const App = () => {
     <div>
       <h1>Blogs</h1>
       <Notifications />
-      <AuthorizedContent loggedIn={login !== null}>
+      <AuthenticatedContent loggedIn={login !== null}>
         <LoginInfo login={login} />
         <Switch>
+          <Route path="/blogs/:id">
+            <BlogInfoView blog={blogs.find(blog => blog.id === blogId)} />
+          </Route>
           <Route path="/users/:id">
             <UserInfoView user={users.find(user => user.id === userId)} />
           </Route>
@@ -58,7 +65,7 @@ const App = () => {
             <BlogsView />
           </Route>
         </Switch>
-      </AuthorizedContent>
+      </AuthenticatedContent>
     </div>
   )
 }

@@ -62,7 +62,9 @@ router.put('/:id', async (req, res) => {
         throw new NotAuthorizedError()
     }
   }
-  const result = await Blog.findByIdAndUpdate(id, updatedBlog, { new: true })
+  const result = await Blog
+    .findByIdAndUpdate(id, updatedBlog, { new: true })
+    .populate('user', {name: 1, username: 1})
   res.json(result)
 })
 
