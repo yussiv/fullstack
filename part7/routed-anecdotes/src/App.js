@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
-import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom'
+import { Link, Route, Switch, useRouteMatch } from 'react-router-dom'
+import Anecdote from './components/Anecdote'
+import AnecdoteList from './components/AnecdoteList'
+import CreateNew from './components/CreateNew'
+import Notification from './components/Notification'
 
 const Menu = () => {
   const padding = {
@@ -13,21 +17,6 @@ const Menu = () => {
     </div>
   )
 }
-
-const AnecdoteList = ({ anecdotes }) => (
-  <div>
-    <h2>Anecdotes</h2>
-    <ul>
-      {
-        anecdotes.map(anecdote => (
-          <li key={anecdote.id} >
-            <Link to={`/${anecdote.id}`}>{anecdote.content}</Link>
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-)
 
 const About = () => (
   <div>
@@ -49,61 +38,6 @@ const Footer = () => (
     Anecdote app for <a href='https://courses.helsinki.fi/fi/tkt21009'>Full Stack -websovelluskehitys</a>.
 
     See <a href='https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js'>https://github.com/fullstack-hy2019/routed-anecdotes/blob/master/src/App.js</a> for the source code.
-  </div>
-)
-
-const CreateNew = (props) => {
-  const history = useHistory()
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    props.addNew({
-      content,
-      author,
-      info,
-      votes: 0
-    })
-    history.push('/')
-  }
-
-  return (
-    <div>
-      <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
-        </div>
-        <div>
-          author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
-        </div>
-        <div>
-          url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
-        </div>
-        <button>create</button>
-      </form>
-    </div>
-  )
-
-}
-
-const Anecdote = ({ anecdote }) => (
-  <div>
-    <h2>{anecdote.content} by {anecdote.author}</h2>
-    <p>has {anecdote.votes} votes</p>
-    <p>for more info see <a href={anecdote.info}>{anecdote.info}</a></p>
-  </div>
-)
-
-const Notification = ({ notification }) => notification && (
-  <div style={{border: '1px solid green', color: 'green', padding: '3px 5px', margin: '10px 0'}}>
-    { notification.content }
   </div>
 )
 
