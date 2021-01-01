@@ -7,7 +7,7 @@ import Notifications from './components/Notifications'
 import blogService from './services/blog'
 import './App.css'
 import Togglable from './components/Togglable'
-import { addBlog, initBlogs } from './reducers/blog'
+import { addBlog, initBlogs, removeBlog, updateBlog } from './reducers/blog'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -47,13 +47,11 @@ const App = () => {
   }
 
   const handleBlogUpdated = async (updatedBlog) => {
-    const responseBlog = await blogService.update(updatedBlog)
-    // setBlogs(blogs.map((blog) => blog.id === updatedBlog.id ? responseBlog : blog))
+    dispatch(updateBlog(updatedBlog))
   }
 
   const handleBlogRemoved = async (blogToRemove) => {
-    await blogService.remove(blogToRemove)
-    // setBlogs(blogs.filter((blog) => blog.id !== blogToRemove.id))
+    dispatch(removeBlog(blogToRemove))
   }
 
   return (

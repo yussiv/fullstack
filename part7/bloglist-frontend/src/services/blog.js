@@ -15,32 +15,20 @@ const getAll = async () => {
 }
 
 const create = async (blog) => {
-  try {
-    const response = await axios.post(baseUrl, blog, axiosConfig)
-    return response.data
-  } catch (err) {
-    console.error(err)
-  }
+  const response = await axios.post(baseUrl, blog, axiosConfig)
+  return response.data
 }
 
 const update = async (blog) => {
-  try {
-    const response = await axios.put(`${baseUrl}/${blog.id}`, {
-      ...blog, user: blog.user.id
-    }, axiosConfig)
-    return response.data
-  } catch (err) {
-    console.error(err)
-  }
+  const response = await axios.put(`${baseUrl}/${blog.id}`, {
+    ...blog, user: blog.user.id
+  }, axiosConfig)
+  return response.data
 }
 
 const remove = async (blog) => {
-  try {
-    const response = await axios.delete(`${baseUrl}/${blog.id}`, axiosConfig)
-    return response.data
-  } catch (err) {
-    console.error(err)
-  }
+  const response = await axios.delete(`${baseUrl}/${blog.id}`, axiosConfig)
+  return response.data
 }
 
 export default { getAll, create, setToken, update, remove }

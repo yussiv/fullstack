@@ -48,15 +48,21 @@ router.put('/:id', async (req, res) => {
   if (!req.authenticated)
     throw new NotAuthenticatedError()
   
+  let updatedBlog = req.body
   const id = req.params.id
   const blog = await Blog.findById(id)
   if (blog) {
     const ownerId = blog.user.toString()
     const userId = req.user._id.toString()
-    if(ownerId !== userId)
-      throw new NotAuthorizedError()
+    if(ownerId !== userId) {
+      // allow incrementing likes by other users
+      if (updatedBlog.likes === blog.likes + 1)
+        updatedBlog = { ...blog.toObject(), likes: updatedBlog.likes }
+      else
+        throw new NotAuthorizedError()
+    }
   }
-  const result = await Blog.findByIdAndUpdate(id, req.body, { new: true })
+  const result = await Blog.findByIdAndUpdate(id, updatedBlog, { new: true })
   res.json(result)
 })
 

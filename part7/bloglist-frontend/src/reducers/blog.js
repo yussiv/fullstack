@@ -7,30 +7,67 @@ const reducer = (state = [], action) => {
     return action.data
   case 'ADD_BLOG':
     return state.concat(action.data)
+  case 'UPDATE_BLOG':
+    return state.map(blog => blog.id === action.data.id ? action.data : blog)
+  case 'REMOVE_BLOG':
+    return state.filter(blog => blog.id !== action.id)
   default:
     return state
   }
 }
 
 export const initBlogs = () => async (dispatch) => {
-  dispatch({
-    type: 'SET_BLOGS',
-    data: await blogService.getAll(),
-  })
+  try {
+    dispatch({
+      type: 'SET_BLOGS',
+      data: await blogService.getAll(),
+    })
+  } catch (error) {
+    dispatch(addNotification(`fetch failed: ${error.message}`, 'failure'))
+  }
 }
 
 export const addBlog = (blog) => async (dispatch) => {
-  const newBlog = await blogService.create(blog)
+  try {
+    const newBlog = await blogService.create(blog)
 
-  dispatch({
-    type: 'ADD_BLOG',
-    data: newBlog,
-  })
+    dispatch({
+      type: 'ADD_BLOG',
+      data: newBlog,
+    })
 
-  dispatch(addNotification(
-    `A new blog ${newBlog.title} by ${newBlog.author} added`,
-    'success'
-  ))
+    dispatch(addNotification(
+      `A new blog ${newBlog.title} by ${newBlog.author} added`,
+      'success'
+    ))
+  } catch (error) {
+    dispatch(addNotification(`create failed: ${error.message}`, 'failure'))
+  }
+}
+
+export const updateBlog = (blog) => async (dispatch) => {
+  try {
+    const updatedBlog = await blogService.update(blog)
+    dispatch({
+      type: 'UPDATE_BLOG',
+      data: updatedBlog,
+    })
+  } catch (error) {
+    dispatch(addNotification(`update failed: ${error.message}`, 'failure'))
+  }
+}
+
+export const removeBlog = (blog) => async (dispatch) => {
+  try {
+    await blogService.remove(blog)
+
+    dispatch({
+      type: 'REMOVE_BLOG',
+      id: blog.id
+    })
+  } catch (error) {
+    dispatch(addNotification(`remove failed: ${error.message}`, 'failure'))
+  }
 }
 
 export default reducer
