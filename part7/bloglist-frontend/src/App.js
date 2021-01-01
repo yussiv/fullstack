@@ -6,11 +6,12 @@ import Notifications from './components/Notifications'
 import BlogsView from './views/BlogsView'
 import UsersView from './views/UsersView'
 import UserInfoView from './views/UserInfoView'
+import BlogInfoView from './views/BlogInfoView'
+import NavBar from './components/NavBar'
 import './App.css'
 import { initBlogs } from './reducers/blog'
-import { initLogin, unsetLogin } from './reducers/login'
+import { initLogin } from './reducers/login'
 import { fetchUsers } from './reducers/user'
-import BlogInfoView from './views/BlogInfoView'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -28,17 +29,6 @@ const App = () => {
     dispatch(fetchUsers())
   }, [dispatch])
 
-  const handleLogout = () => {
-    dispatch(unsetLogin())
-  }
-
-  const LoginInfo = ({ login }) => (
-    <div>
-      {login.name} logged in
-      <button onClick={handleLogout}>Logout</button>
-    </div>
-  )
-
   const AuthenticatedContent = ({ loggedIn, children }) => (
     <div>
       {loggedIn ? children : <Login />}
@@ -50,7 +40,7 @@ const App = () => {
       <h1>Blogs</h1>
       <Notifications />
       <AuthenticatedContent loggedIn={login !== null}>
-        <LoginInfo login={login} />
+        <NavBar login={login} />
         <Switch>
           <Route path="/blogs/:id">
             <BlogInfoView blog={blogs.find(blog => blog.id === blogId)} />
