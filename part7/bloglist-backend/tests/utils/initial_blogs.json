@@ -1,0 +1,32 @@
+[
+  {
+    "title": "The C Programming Language",
+    "author": "Brian Kernighan, Dennis Ritchie",
+    "url": "https://archive.org/details/TheCProgrammingLanguageFirstEdition",
+    "likes": 8
+  },
+  {
+    "title": "The Go Programming Language",
+    "author": "Robert Griesemer, Rob Pike, Ken Thompson",
+    "url": "https://golang.org/",
+    "likes": 1
+  },
+  {
+    "title": "Patterns for Managing Source Code Branches",
+    "author": "Martin Fowler",
+    "url": "https://martinfowler.com/articles/branching-patterns.html",
+    "likes": 42
+  },
+  {
+    "title": "The Go Programming Language ",
+    "author": "Uncle Bob",
+    "url": "http://blog.cleancoder.com/uncle-bob/2020/05/27/ReplDrivenDesign.html",
+    "likes": 7
+  },
+  {
+    "title": "KeystoneInterface",
+    "author": "Martin Fowler",
+    "url": "https://martinfowler.com/bliki/KeystoneInterface.html",
+    "likes": 2
+  }
+] 

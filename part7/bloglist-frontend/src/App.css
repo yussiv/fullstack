@@ -1,0 +1,31 @@
+.notification {
+  border: #ccc 2px solid;
+  border-radius: 3px;
+  padding: 3px 5px;
+  margin: 5px 0;
+}
+
+.success {
+  border-color: green
+}
+
+.failure {
+  border-color: red;
+}
+
+.blog-entry {
+  padding: 3px 5px;
+  border: 1px solid  #999;
+  margin-bottom: 3px;
+}
+
+button {
+  margin: 0 5px;
+  padding: 2px 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.button-remove {
+  background-color: #ffe9e9;
+}
