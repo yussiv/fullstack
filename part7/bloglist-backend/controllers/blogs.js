@@ -1,10 +1,13 @@
 const router = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const Comment = require('../models/comment')
 const { NotAuthorizedError, NotAuthenticatedError} = require('../utils/error')
 
 router.get('/', async (req, res) => {
-  const blogs = await Blog.find({}).populate('user', {name: 1, username: 1})
+  const blogs = await Blog.find({})
+    .populate('user', {name: 1, username: 1})
+    .populate('comments', {content: 1})
   res.json(blogs)
 })
 
@@ -74,6 +77,26 @@ const removeBlogFromUser = async (blogId, userId) => {
     user.blogs = user.blogs.filter(b => b !== blogId)
     await user.save()
   }
-} 
+}
+
+router.post('/:id/comments', async (req, res) => {
+  // if (!req.authenticated)
+  //   throw new NotAuthenticatedError()
+
+  const id = req.params.id
+  const blog = await Blog.findById(id)
+
+  const comment = new Comment({
+    ...req.body,
+
+    blog: blog._id
+  })
+  const savedComment = await comment.save()
+
+  blog.comments = blog.comments.concat(savedComment._id)
+  await blog.save()
+
+  res.status(201).json(savedComment)
+})
 
 module.exports = router
