@@ -4,7 +4,7 @@ const reducer = (state = initialState, action) => {
     case 'SHOW_NOTIFICATION':
       return action.data
     case 'HIDE_NOTIFICATION':
-      if (state.id !== action.id)
+      if (state.id !== action.id) // ignore previous action ids
         return state
       else
         return initialState
