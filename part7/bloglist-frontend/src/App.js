@@ -1,21 +1,27 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 import Login from './components/Login'
 import Notifications from './components/Notifications'
 import BlogsView from './views/BlogsView'
 import UsersView from './views/UsersView'
+import UserInfoView from './views/UserInfoView'
 import './App.css'
 import { initBlogs } from './reducers/blog'
 import { initLogin, unsetLogin } from './reducers/login'
+import { fetchUsers } from './reducers/user'
 
 const App = () => {
   const dispatch = useDispatch()
   const login = useSelector(state => state.login)
+  const users = useSelector(state => state.users)
+  const routeMatch = useRouteMatch('/users/:id')
+  const userId = routeMatch ? routeMatch.params.id : null
 
   useEffect(() => {
     dispatch(initBlogs())
     dispatch(initLogin())
+    dispatch(fetchUsers())
   }, [dispatch])
 
   const handleLogout = () => {
@@ -42,8 +48,11 @@ const App = () => {
       <AuthorizedContent loggedIn={login !== null}>
         <LoginInfo login={login} />
         <Switch>
+          <Route path="/users/:id">
+            <UserInfoView user={users.find(user => user.id === userId)} />
+          </Route>
           <Route path="/users">
-            <UsersView />
+            <UsersView users={users} />
           </Route>
           <Route path="/">
             <BlogsView />
