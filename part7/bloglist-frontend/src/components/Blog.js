@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
-const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved, user }) => {
+const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved }) => {
   const [expanded, setExpanded] = useState(false)
+  const login = useSelector(state => state.login)
   const { title, url, likes, author } = blog
   const toggleExpanded = () => {
     setExpanded(!expanded)
@@ -16,7 +18,7 @@ const Blog = ({ blog, handleBlogUpdated, handleBlogRemoved, user }) => {
     }
   }
   const RemoveButton = () => {
-    if (blog.user === user.id || blog.user.id === user.id) {
+    if (blog.user === login.id || blog.user.id === login.id) {
       return (
         <button onClick={handleRemove} className="button-remove">remove</button>
       )
@@ -53,7 +55,6 @@ Blog.propTypes = {
   blog: PropTypes.object.isRequired,
   handleBlogUpdated: PropTypes.func.isRequired,
   handleBlogRemoved: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
 }
 
 export default Blog

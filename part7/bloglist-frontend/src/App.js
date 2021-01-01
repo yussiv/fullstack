@@ -1,66 +1,55 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import BlogList from './components/BlogList'
-import NewBlogForm from './components/NewBlogForm'
+import { Switch, Route } from 'react-router-dom'
 import Login from './components/Login'
 import Notifications from './components/Notifications'
+import BlogsView from './views/BlogsView'
+import UsersView from './views/UsersView'
 import './App.css'
-import Togglable from './components/Togglable'
-import { addBlog, initBlogs, removeBlog, updateBlog } from './reducers/blog'
-import { initUser, setUser, unsetUser } from './reducers/user'
+import { initBlogs } from './reducers/blog'
+import { initLogin, unsetLogin } from './reducers/login'
 
 const App = () => {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
-  const blogs = useSelector(state => state.blogs)
-  const newBlogToggleRef = useRef()
+  const login = useSelector(state => state.login)
 
   useEffect(() => {
     dispatch(initBlogs())
-    dispatch(initUser())
+    dispatch(initLogin())
   }, [dispatch])
 
-  const handleLogin = (user) => {
-    dispatch(setUser(user))
-  }
-
   const handleLogout = () => {
-    dispatch(unsetUser())
+    dispatch(unsetLogin())
   }
 
-  const handleBlogCreated = async (blog) => {
-    dispatch(addBlog(blog))
-    newBlogToggleRef.current.hide()
-  }
+  const LoginInfo = ({ login }) => (
+    <div>
+      {login.name} logged in
+      <button onClick={handleLogout}>Logout</button>
+    </div>
+  )
 
-  const handleBlogUpdated = async (updatedBlog) => {
-    dispatch(updateBlog(updatedBlog))
-  }
-
-  const handleBlogRemoved = async (blogToRemove) => {
-    dispatch(removeBlog(blogToRemove))
-  }
+  const AuthorizedContent = ({ loggedIn, children }) => (
+    <div>
+      {loggedIn ? children : <Login />}
+    </div>
+  )
 
   return (
     <div>
+      <h1>Blogs</h1>
       <Notifications />
-      { user === null
-        ? <Login handleLogin={handleLogin} />
-        : <div>
-          <div>
-            {user.name} logged in
-            <button onClick={handleLogout}>Logout</button>
-          </div>
-          <Togglable buttonText="Create new blog" ref={newBlogToggleRef}>
-            <NewBlogForm handleBlogCreated={handleBlogCreated} />
-          </Togglable>
-          <BlogList
-            blogs={blogs}
-            handleBlogUpdated={handleBlogUpdated}
-            handleBlogRemoved={handleBlogRemoved}
-            user={user}
-          />
-        </div>}
+      <AuthorizedContent loggedIn={login !== null}>
+        <LoginInfo login={login} />
+        <Switch>
+          <Route path="/users">
+            <UsersView />
+          </Route>
+          <Route path="/">
+            <BlogsView />
+          </Route>
+        </Switch>
+      </AuthorizedContent>
     </div>
   )
 }

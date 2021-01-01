@@ -1,36 +1,20 @@
-import blogService from '../services/blog'
+import userService from '../services/user'
 
-const reducer = (state = null, action) => {
+const reducer = (state = [], action) => {
   switch (action.type) {
-  case 'SET_USER':
+  case 'SET_USERS':
     return action.data
-  case 'UNSET_USER':
-    return null
   default:
     return state
   }
 }
 
-export const setUser = (user) => (dispatch) => {
-  blogService.setToken(user.token)
-  window.localStorage.setItem('user', JSON.stringify(user))
+export const fetchUsers = () => async (dispatch) => {
+  const users = await userService.getAll()
   dispatch({
-    type: 'SET_USER',
-    data: user,
+    type: 'SET_USERS',
+    data: users,
   })
-}
-
-export const unsetUser = () => (dispatch) => {
-  window.localStorage.removeItem('user')
-  blogService.setToken('')
-  dispatch({ type: 'UNSET_USER' })
-}
-
-export const initUser = () => (dispatch) => {
-  const userJSON = window.localStorage.getItem('user')
-  if (userJSON) {
-    dispatch(setUser(JSON.parse(userJSON)))
-  }
 }
 
 export default reducer

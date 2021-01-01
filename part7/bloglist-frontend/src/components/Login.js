@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import loginService from '../services/login'
 import { addNotification } from '../reducers/notification'
+import { setLogin } from '../reducers/login'
 
-const Login = ({ handleLogin }) => {
+const Login = () => {
   const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -12,7 +13,7 @@ const Login = ({ handleLogin }) => {
     event.preventDefault()
     try {
       const user = await loginService.login(username, password)
-      handleLogin(user)
+      dispatch(setLogin(user))
     } catch (err) {
       dispatch(addNotification(err.response.data.error, 'failure'))
     }
