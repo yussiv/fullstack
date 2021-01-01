@@ -1,44 +1,31 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import BlogList from './components/BlogList'
 import NewBlogForm from './components/NewBlogForm'
 import Login from './components/Login'
 import Notifications from './components/Notifications'
-import blogService from './services/blog'
 import './App.css'
 import Togglable from './components/Togglable'
 import { addBlog, initBlogs, removeBlog, updateBlog } from './reducers/blog'
+import { initUser, setUser, unsetUser } from './reducers/user'
 
 const App = () => {
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
   const blogs = useSelector(state => state.blogs)
-  const [user, setUser] = useState(null)
   const newBlogToggleRef = useRef()
-
-
-  useEffect(() => {
-    const userJSON = window.localStorage.getItem('user')
-    if (userJSON) {
-      const savedUser = JSON.parse(userJSON)
-      blogService.setToken(savedUser.token)
-      setUser(savedUser)
-    }
-  }, [])
 
   useEffect(() => {
     dispatch(initBlogs())
+    dispatch(initUser())
   }, [dispatch])
 
   const handleLogin = (user) => {
-    window.localStorage.setItem('user', JSON.stringify(user))
-    blogService.setToken(user.token)
-    setUser(user)
+    dispatch(setUser(user))
   }
 
   const handleLogout = () => {
-    window.localStorage.removeItem('user')
-    blogService.setToken('')
-    setUser(null)
+    dispatch(unsetUser())
   }
 
   const handleBlogCreated = async (blog) => {
