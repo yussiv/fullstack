@@ -49,32 +49,28 @@ describe('Blog app', function() {
 
       cy.contains('A new blog new title by new author added')
       cy.get('.blog-entry')
-        .contains('new title new author')
-        .contains('show more')
+        .contains('new title')
     })
 
     it('A blog can be liked', function() {
       cy.get('.blog-entry')
-        .contains('existing blog')
-        .parent().contains('show more').click()
+        .contains('existing blog').click()
 
       cy.get('.blog-entry')
         .contains('existing blog')
-        .parent().get('.button-like').click()
+        .parent().get('.like').click()
 
       cy.get('.blog-entry')
-        .contains('existing blog')
-        .parent().contains('likes 1')
+        .get('.like')
+        .parent().contains('1 likes')
     })
 
     it('A blog can be deleted by the user who added it', function() {
       cy.get('.blog-entry')
-        .contains('existing blog')
-        .parent().contains('show more').click()
+        .contains('existing blog').click()
 
       cy.get('.blog-entry')
-        .contains('existing blog')
-        .parent().get('.button-remove').click()
+        .get('.remove').click()
 
       cy.get('.blog-entry')
         .should('not.exist')
@@ -86,12 +82,11 @@ describe('Blog app', function() {
       cy.visit('http://localhost:3000')
 
       cy.get('.blog-entry')
-        .contains('existing blog')
-        .parent().contains('show more').click()
+        .contains('existing blog').click()
 
       cy.get('.blog-entry')
         .contains('existing blog')
-        .parent().get('.button-remove').should('not.exist')
+        .get('.remove').should('not.exist')
     })
 
     it('Blogs are in descending order by likes', function() {
@@ -102,7 +97,7 @@ describe('Blog app', function() {
 
       cy.reload()
 
-      cy.get('.blog-entry .title')
+      cy.get('.blog-entry')
         .then(blogs => {
           const blogTitles = blogs.toArray().map(title => title.innerText)
           expect(blogTitles).to.eql(['title2', 'title4', 'title3', 'title1', 'existing blog'])

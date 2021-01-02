@@ -1,5 +1,6 @@
 import React, { useImperativeHandle, useState } from 'react'
 import PropTypes from 'prop-types'
+import { Button } from './styled'
 
 const Togglable = React.forwardRef(({ buttonText, children }, ref) => {
   const [visible, setVisible] = useState(false)
@@ -15,12 +16,16 @@ const Togglable = React.forwardRef(({ buttonText, children }, ref) => {
 
   return visible
     ? (
-      <>
+      <div className="togglable open">
         { children }
-        <button onClick={handleClick}>cancel</button>
-      </>
+        <Button className="close-button" onClick={handleClick}>cancel</Button>
+      </div>
     )
-    : <button onClick={handleClick}>{buttonText}</button>
+    : (
+      <div className="togglable closed">
+        <Button onClick={handleClick}>{buttonText}</Button>
+      </div>
+    )
 })
 
 Togglable.displayName = 'Togglable'
